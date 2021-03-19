@@ -4,12 +4,10 @@
   "run",
   "--rm",
   "--network=host",
-  "-e",
-  "DISPLAY=$DISPLAY",
   "-v",
   "{connection_file}:/connection-spec",
   "-v",
-  "/tmp/.X11-unix:/tmp/.X11-unix",
+  "$(pwd):/workspace",
   "gft/carla-jupyter",
   "python",
   "-m",
@@ -17,6 +15,6 @@
   "-f",
   "/connection-spec"
  ],
- "display_name": "gft_carla",
+ "display_name": "gft-carla-ros",
  "language": "python"
 }
