@@ -1,0 +1,22 @@
+{
+ "argv": [
+  "/usr/bin/docker",
+  "run",
+  "--rm",
+  "--network=host",
+  "-e",
+  "DISPLAY=$DISPLAY",
+  "-v",
+  "{connection_file}:/connection-spec",
+  "-v",
+  "/tmp/.X11-unix:/tmp/.X11-unix",
+  "gft/carla-jupyter",
+  "python",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "/connection-spec"
+ ],
+ "display_name": "gft_carla",
+ "language": "python"
+}
