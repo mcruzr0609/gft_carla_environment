@@ -1,0 +1,13 @@
+FROM gft/carla-ros-main
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3-pip \
+	iputils-ping \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install \
+	pygame
+
+#COPY ./docker/content/ros_entrypoint_bridge.sh /	
+CMD ["sh", "-c", "roslaunch carla_ros_bridge carla_ros_bridge_gft.launch town:=Town02 timeout:=30 fixed_delta_seconds:=$FIXED_DELTA"]

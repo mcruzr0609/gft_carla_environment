@@ -1,0 +1,28 @@
+FROM gft/carla-ros-main
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x -o /tmp/nodesource_setup.sh && chmod +x /tmp/nodesource_setup.sh
+RUN /bin/bash -c '/tmp/nodesource_setup.sh'
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3-pip \
+	nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+#RUN useradd -ms /bin/bash gft
+#USER gft
+	
+RUN pip3 install \
+    numpy \
+	jupyter \
+	jupyterlab \
+	bqplot \
+	pyyaml \
+	Pillow \
+	ipython \ 
+	ipykernel \
+	ipywidgets
+
+WORKDIR /workspace
+
+#CMD ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root"]

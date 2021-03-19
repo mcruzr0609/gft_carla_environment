@@ -1,0 +1,21 @@
+version: '2.3'
+
+services:
+  carla-server:
+    runtime: nvidia
+    image: carlasim/carla:0.9.10
+    command: './CarlaUE4.sh Town02 -carla-server -nosound'
+    network_mode: host
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - SDL_VIDEODRIVER=offscreen
+    restart: always
+     
+  carla-ros-bridge:
+    image: gft/carla-ros-bridge
+    network_mode: host
+    environment:
+      - FIXED_DELTA=0.095
+    depends_on:
+      - carla-server
+    restart: always
