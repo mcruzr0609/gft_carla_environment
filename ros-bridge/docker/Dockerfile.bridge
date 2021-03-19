@@ -10,4 +10,4 @@ RUN pip3 install \
 	pygame
 
 #COPY ./docker/content/ros_entrypoint_bridge.sh /	
-CMD ["sh", "-c", "roslaunch carla_ros_bridge carla_ros_bridge_gft.launch town:=Town02 timeout:=30 fixed_delta_seconds:=$FIXED_DELTA"]
+CMD ["sh", "-c", "roslaunch carla_ros_bridge carla_ros_bridge.launch town:=Town02 timeout:=30 fixed_delta_seconds:=$FIXED_DELTA"]
