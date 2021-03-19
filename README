@@ -1,3 +1,7 @@
+#Creando images
 docker build --tag gft/carla-main -f Dockerfile.main ..
 docker build --tag gft/carla-bridge -f Dockerfile.bridge ..
 docker build --tag gft/carla-jupyter -f Dockerfile.jupyter ..
+
+#Iniciando server y bridge
+docker-compose up --build --force-recreate -d
