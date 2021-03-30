@@ -1,0 +1,136 @@
+#What is a jupyter kernel? 
+Kernels are programming language specific processes that run independently and interact with the Jupyter Applications and their user interfaces. IPython is the reference Jupyter kernel, providing a powerful environment for interactive computing in Python.
+
+--------- When signaled with <> replace with the required data ---------
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+#Creating a kernel for jupyter with Conda
+We create an environment with pyenv and conda 
+
+##Installing Pyenv
+curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+pyenv update
+
+##Updating environment vars
+echo 'export PATH="~/.pyenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bashrc
+
+##Installing Anaconda
+pyenv install anaconda3-5.3.1
+
+##Activating anaconda with pyenv
+pyenv activate anaconda3-2020.02
+
+##Creating environment with conda 
+conda create -n tensorflowenv python=3.7.7
+
+##Activating anaconda 
+conda activate tensorflowenv
+
+##Installing Cuda
+conda install -c anaconda cudatoolkit
+conda install -c anaconda cudnn
+
+##Installing Tensorflow
+conda install -c anaconda tensorflow-gpu
+
+##Installing Opencv
+conda install -c menpo opencv
+pip install opencv-python
+
+##Installing Pandas
+conda install -c anaconda pandas
+
+##Installing Keras
+conda install -c anaconda keras
+
+##Installing Scikit-learn
+conda install -c anaconda scikit-learn
+
+##Installing kernel for Jupyter, we specify the name of the kernel e.g: tensorflow-latest
+conda install -c anaconda jupyter
+conda install -c anaconda ipykernel
+python -m ipykernel install --user --name=tensorflow-latest
+
+(Refresh browser)
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+#Creating a kernel for jupyter with Docker
+The docker image must have the dependencies installed 
+	ipython \ 
+	ipykernel \
+	ipywidgets
+	
+##we create a folder with the name of the kernel 
+mkdir ~/.local/share/jupyter/kernels/<kernel name>
+
+##Inside the folder we create a file called kernel.json, with the following structure 
+{
+ "argv": [
+  "/usr/bin/docker",
+  "run",
+  "--rm",
+  "--network=host",
+  "-v",
+  "{connection_file}:/connection-spec",
+   "-v",
+  "/home/<usuario>/workspace:/workspace",
+  "<docker-image>",
+  "python",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "/connection-spec"
+ ],
+ "display_name": "<kernel-name>",
+ "language": "python"
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+#Carla's kernel 
+We compile the image of Carla, view Dockerfile.kernel
+
+cd ~
+git clone https://github.com/carla-simulator/ros-bridge.git
+cp Dockerfile.kernel ~/ros-bridge/docker/Dockerfile.kernel
+cd ~/ros-bridge/docker
+docker build --tag gft/carla-jupyter -f Dockerfile.jupyter 
+
+##we create a folder with the name of the kernel 
+mkdir ~/.local/share/jupyter/kernels/gft-carla-ros
+
+##Inside the folder we create a file called kernel.json, with the following structure 
+{
+ "argv": [
+  "/usr/bin/docker",
+  "run",
+  "--rm",
+  "--network=host",
+  "-e",
+  "DISPLAY=:1",
+  "-v",
+  "{connection_file}:/connection-spec",
+   "-v",
+  "/home/<usuario>/workspace-ros:/workspace",
+  "-v",
+  "/tmp/.X11-unix:/tmp/.X11-unix",
+  "gft/carla-jupyter",
+  "python",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "/connection-spec"
+ ],
+ "display_name": "gft-carla-ros",
+ "language": "python"
+}
+
